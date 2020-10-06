@@ -6,45 +6,78 @@ const {
     GraphQLInt,
 } = require('graphql');
 
+const Base64 = require('js-base64');
+const { globalIdField } = require('graphql-base64');
+
+const { connectionFromArray } = require('graphql-relay');
+
 const joinMonster = require('join-monster').default;
-const Book = require('./Book');
-const Author = require('./Author');
 const { nodeField } = require('./Node');
+
+const { Book, BookConnection } = require('./Book');
 
 const db = require('../db/knex');
 
-module.exports = new GraphQLObjectType({
+const resolver = new GraphQLObjectType({
     description: 'global query object',
     name: 'Query',
     fields: {
-        version: {
-            type: GraphQLString,
-            resolve: () => joinMonster.version,
-        },
-
         node: nodeField,
 
         books: {
-            type: new GraphQLList(Book),
-            resolve: (parent, args, context, resolveInfo) => {
-                return joinMonster(resolveInfo, context, (sql) => {
+            type: BookConnection,
+            resolve: async(parent, args, context, resolveInfo) => {
+                const data = await joinMonster(resolveInfo, context, (sql) => {
                     return db.raw(sql);
                 });
+                return connectionFromArray(data, args);
             },
         },
+
         book: {
-            type: new GraphQLList(Book),
+            type: BookConnection,
             args: {
                 id: {
-                    type: new GraphQLNonNull(GraphQLInt),
+                    type: GraphQLInt,
                 },
             },
+
             where: (bookTable, args, context) => {
-                return `${bookTable}.id = ${args.id}`;
+                if (args.id) return `${bookTable}.id = ${args.id}`;
             },
-            resolve: (parent, args, context, resolveInfo) => {
-                return joinMonster(resolveInfo, context, (sql) => db.raw(sql));
+
+            resolve: async(parent, args, context, resolveInfo) => {
+                const data = await joinMonster(resolveInfo, context, (sql) => {
+                    return db.raw(sql);
+                });
+                let idDecode = Base64.encode(args.id.toString());
+                console.log(connectionFromArray(data, idDecode));
+                return connectionFromArray(data, idDecode);
+            },
+        },
+        pagration: {
+            type: BookConnection,
+            args: {
+                first: {
+                    type: GraphQLInt,
+                },
+                after: {
+                    type: GraphQLInt,
+                },
+            },
+            resolve: async(parent, args, context, resolveInfo) => {
+                const { first = null, after = 0 } = args;
+                let query = db('books').offset(after);
+                if (first) {
+                    query = query.limit(first);
+                }
+                const data = await query;
+                return connectionFromArray(data, args);
             },
         },
     },
 });
+
+console.log(resolver);
+
+module.exports = resolver;

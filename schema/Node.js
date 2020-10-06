@@ -5,15 +5,15 @@ const joinMonster = require('join-monster').default;
 const db = require('../db/knex');
 
 const { nodeInterface, nodeField } = nodeDefinitions(
-    (globalId, context, resolveInfo) => {
+    async(globalId, context, resolveInfo) => {
         const { type, id } = fromGlobalId(globalId);
-        return joinMonster.getNode(
+        return await joinMonster.getNode(
             type,
             resolveInfo,
             context,
             parseInt(id),
             (sql) => {
-                db.raw(sql);
+                return db.raw(sql);
             }
         );
     },
