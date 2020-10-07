@@ -39,4 +39,4 @@ const { connectionType: AuthorConnection } = connectionDefinitions({
     },
 });
 
-module.exports = { Author };
+module.exports = { Author, AuthorConnection };

@@ -5,32 +5,35 @@ const {
     GraphQLString,
     GraphQLInt,
 } = require('graphql');
-
 const Base64 = require('js-base64');
 const { globalIdField } = require('graphql-base64');
-
-const { connectionFromArray } = require('graphql-relay');
-
+const { connectionFromArray, connectionArgs } = require('graphql-relay');
 const joinMonster = require('join-monster').default;
+
 const { nodeField } = require('./Node');
-
 const { Book, BookConnection } = require('./Book');
-
 const db = require('../db/knex');
+const { count } = require('../db/knex');
+const { AuthorConnection } = require('./Author');
 
 const resolver = new GraphQLObjectType({
     description: 'global query object',
+    sqlPaginate: true,
     name: 'Query',
     fields: {
         node: nodeField,
-
         books: {
             type: BookConnection,
+            args: connectionArgs,
             resolve: async(parent, args, context, resolveInfo) => {
+                console.log(args);
                 const data = await joinMonster(resolveInfo, context, (sql) => {
                     return db.raw(sql);
                 });
-                return connectionFromArray(data, args);
+                const [res] = await db('books').count('*');
+                const total = res.count;
+                const entity = { total, ...connectionFromArray(data, args) };
+                return entity;
             },
         },
 
@@ -51,7 +54,6 @@ const resolver = new GraphQLObjectType({
                     return db.raw(sql);
                 });
                 let idDecode = Base64.encode(args.id.toString());
-                console.log(connectionFromArray(data, idDecode));
                 return connectionFromArray(data, idDecode);
             },
         },
@@ -77,7 +79,5 @@ const resolver = new GraphQLObjectType({
         },
     },
 });
-
-console.log(resolver);
 
 module.exports = resolver;

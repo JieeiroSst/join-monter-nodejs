@@ -5,9 +5,14 @@ const {
     GraphQLList,
 } = require('graphql');
 const { GraphQLDateTime } = require('graphql-iso-date');
-const { connectionDefinitions, globalIdField } = require('graphql-relay');
+const {
+    connectionDefinitions,
+    globalIdField,
+    forwardConnectionArgs,
+    connectionFromArray,
+} = require('graphql-relay');
 
-const { Author } = require('./Author');
+const { Author, AuthorConnection } = require('./Author');
 const { nodeInterface } = require('./Node');
 
 const Book = new GraphQLObjectType({
@@ -17,7 +22,7 @@ const Book = new GraphQLObjectType({
     interfaces: [nodeInterface],
     fields: {
         id: {
-            ...globalIdField('book'),
+            ...globalIdField(),
             sqlDeps: ['id'],
         },
 
@@ -47,9 +52,16 @@ const Book = new GraphQLObjectType({
         },
 
         authors: {
-            type: new GraphQLList(Author),
-            sqlJoin(bookTable, authorTable) {
-                return `${bookTable}.auth_id = ${authorTable}.id`;
+            type: AuthorConnection,
+            //sqlPaginate: true,
+            args: forwardConnectionArgs,
+            orderBy: {
+                id: 'desc',
+            },
+            sqlJoin: (bookTable, authorTable) =>
+                `${bookTable}.auth_id = ${authorTable}.id`,
+            resolve: async(parent, args) => {
+                return connectionFromArray(parent.authors, args);
             },
         },
     },
@@ -61,7 +73,5 @@ const { connectionType: BookConnection } = connectionDefinitions({
         total: { type: GraphQLInt },
     },
 });
-
-console.log(BookConnection._typeConfig.fields);
 
 module.exports = { Book, BookConnection };
