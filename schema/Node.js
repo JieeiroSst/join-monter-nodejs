@@ -14,7 +14,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
             parseInt(id),
             (sql) => {
                 return db.raw(sql);
-            }
+            }, { dialect: 'pg' }
         );
     },
     (obj) => obj.__type__

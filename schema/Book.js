@@ -53,16 +53,13 @@ const Book = new GraphQLObjectType({
 
         authors: {
             type: AuthorConnection,
-            //sqlPaginate: true,
+            sqlPaginate: true,
             args: forwardConnectionArgs,
             orderBy: {
                 id: 'desc',
             },
             sqlJoin: (bookTable, authorTable) =>
                 `${bookTable}.auth_id = ${authorTable}.id`,
-            resolve: async(parent, args) => {
-                return connectionFromArray(parent.authors, args);
-            },
         },
     },
 });
