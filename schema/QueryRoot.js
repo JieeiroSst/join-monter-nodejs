@@ -15,6 +15,7 @@ const { Book, BookConnection } = require('./Book');
 const db = require('../db/knex');
 const { count } = require('../db/knex');
 const { AuthorConnection } = require('./Author');
+const { CategoryConnection } = require('./categories');
 
 const resolver = new GraphQLObjectType({
     description: 'global query object',
@@ -34,6 +35,42 @@ const resolver = new GraphQLObjectType({
                     }, { dialect: 'pg' }
                 );
                 const [res] = await db('books').count('*');
+                const total = res.count;
+                const entity = { total, ...connectionFromArray(data, args) };
+                return entity;
+            },
+        },
+
+        authors: {
+            type: AuthorConnection,
+            args: connectionArgs,
+            resolve: async(parent, args, context, resolveInfo) => {
+                const data = await joinMonster(
+                    resolveInfo,
+                    context,
+                    (sql) => {
+                        return db.raw(sql);
+                    }, { dialect: 'pg' }
+                );
+                const [res] = await db('authors').count('*');
+                const total = res.count;
+                const entity = { total, ...connectionFromArray(data, args) };
+                return entity;
+            },
+        },
+
+        categries: {
+            type: CategoryConnection,
+            args: connectionArgs,
+            resolve: async(parent, args, context, resolveInfo) => {
+                const data = await joinMonster(
+                    resolveInfo,
+                    context,
+                    (sql) => {
+                        return db.raw(sql);
+                    }, { dialect: 'pg' }
+                );
+                const [res] = await db('categories').count('*');
                 const total = res.count;
                 const entity = { total, ...connectionFromArray(data, args) };
                 return entity;
