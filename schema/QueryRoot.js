@@ -2,10 +2,10 @@ const { GraphQLObjectType } = require('graphql');
 const { connectionArgs } = require('graphql-relay');
 
 const { nodeField } = require('./Node');
-const { BookConnection } = require('./Book');
-const { AuthorConnection } = require('./Author');
-const { CategoryConnection } = require('./categories');
 const { pagination } = require('../utils/joinMonter');
+const { CategoryConnection } = require('./Category');
+const { AuthorConnection } = require('./Author');
+const { BookConnection } = require('./Book');
 
 const resolver = new GraphQLObjectType({
     description: 'global query object',

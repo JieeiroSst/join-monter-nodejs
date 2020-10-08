@@ -1,19 +1,13 @@
-const {
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLInt,
-    GraphQLList,
-} = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLInt } = require('graphql');
 const { GraphQLDateTime } = require('graphql-iso-date');
 const {
     connectionDefinitions,
     globalIdField,
     forwardConnectionArgs,
-    connectionFromArray,
 } = require('graphql-relay');
 
-const { AuthorConnection } = require('./Author');
 const { nodeInterface } = require('./Node');
+const { AuthorConnection } = require('./Author');
 
 const Book = new GraphQLObjectType({
     name: 'Book',
@@ -53,13 +47,15 @@ const Book = new GraphQLObjectType({
 
         authors: {
             type: AuthorConnection,
-            sqlPaginate: true,
-            args: forwardConnectionArgs,
-            orderBy: {
-                id: 'desc',
+            junction: {
+                sqlTable: 'categories',
+                sqlJoins: [
+                    (bookTable, categoryTable) =>
+                    `${bookTable}.auth_id=${categoryTable}.auth_id`,
+                    (categoryTable, authorTable) =>
+                    `${categoryTable}.auth_id=${authorTable}.id`,
+                ],
             },
-            sqlJoin: (bookTable, authorTable) =>
-                `${bookTable}.auth_id = ${authorTable}.id`,
         },
     },
 });

@@ -1,13 +1,13 @@
 const { GraphQLObjectType, GraphQLString, GraphQLInt } = require('graphql');
 const {
-    connectionDefinitions,
     globalIdField,
     forwardConnectionArgs,
+    connectionDefinitions,
 } = require('graphql-relay');
 
-const { nodeInterface } = require('./Node');
-const { BookConnection } = require('./Book');
 const { AuthorConnection } = require('./Author');
+const { BookConnection } = require('./Book');
+const { nodeInterface } = require('./Node');
 
 const Category = new GraphQLObjectType({
     name: 'Category',
@@ -55,4 +55,5 @@ const { connectionType: CategoryConnection } = connectionDefinitions({
         total: { type: GraphQLInt },
     },
 });
+
 module.exports = { Category, CategoryConnection };
