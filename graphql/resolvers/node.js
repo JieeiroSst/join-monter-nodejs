@@ -1,15 +1,14 @@
 const { nodeDefinitions, fromGlobalId } = require('graphql-relay');
-
 const joinMonster = require('join-monster').default;
 
-const db = require('../db/knex');
+const db = require('../../db/knex');
 
 const { nodeInterface, nodeField } = nodeDefinitions(
-    async(globalId, context, resolveInfo) => {
+    async(globalId, context, resolverInfo) => {
         const { type, id } = fromGlobalId(globalId);
         return await joinMonster.getNode(
             type,
-            resolveInfo,
+            resolverInfo,
             context,
             parseInt(id),
             (sql) => {
@@ -20,4 +19,14 @@ const { nodeInterface, nodeField } = nodeDefinitions(
     (obj) => obj.__type__
 );
 
-module.exports = { nodeInterface, nodeField };
+const resolvers = {
+    Query: {},
+    Mutation: {},
+    Node: {
+        __resolveType() {
+            return nodeInterface;
+        },
+    },
+};
+
+module.exports = { resolvers };

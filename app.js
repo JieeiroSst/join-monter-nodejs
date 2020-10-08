@@ -3,7 +3,7 @@ const KoaRouter = require('koa-router');
 const graphqlHTTP = require('koa-graphql');
 const koaConvert = require('koa-convert');
 
-const schema = require('./schema/index');
+const schema = require('./graphql');
 const loginRouter = require('./api/login');
 
 const app = new Koa();
