@@ -6,8 +6,7 @@ const resolvers = {
         books: async(parent, args, context, resolveInfo) => {
             try {
                 const nameTable = 'books';
-                const data = pagination(nameTable, args, context, resolveInfo);
-                console.log(resolveInfo);
+                const data = await pagination(nameTable, args, context, resolveInfo);
                 return {
                     error: null,
                     result: data,
@@ -20,6 +19,7 @@ const resolvers = {
             }
         },
     },
+
     Mutation: {
         insertBook: async(parent, args, context, info) => {
             try {
@@ -86,6 +86,7 @@ const resolvers = {
             }
         },
     },
+
     Book: {
         createdAt: (parent) => {
             return parent.created_at;

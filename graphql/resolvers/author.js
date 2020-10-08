@@ -24,6 +24,7 @@ const resolvers = {
         insertAuthor: async(parent, args, context, info) => {
             try {
                 const { name } = args;
+                console.log(name);
                 const data = await db('authors')
                     .insert({ name })
                     .returning('*');

@@ -99,7 +99,7 @@ type BookResult {
 }
 
 type AuthorResult {
-  result: Author
+  result: [Author]
 }
 
 type CategoryResult {

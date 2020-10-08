@@ -33,7 +33,7 @@ const resolvers = {
                     .insert(entity)
                     .returning('*');
                 return {
-                    result: data,
+                    result: [data],
                 };
             } catch (error) {
                 return {

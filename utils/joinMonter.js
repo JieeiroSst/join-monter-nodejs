@@ -4,6 +4,7 @@ const { default: joinMonster } = require('join-monster');
 const db = require('../db/knex');
 
 const pagination = async(nameTable, args, context, resolveInfo) => {
+    console.log(nameTable);
     const data = await joinMonster(
         resolveInfo,
         context,
