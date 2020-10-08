@@ -3,9 +3,9 @@ const db = require('../../db/knex');
 
 const resolvers = {
     Query: {
-        books: (parent, args, context, info) => {
+        categories: (parent, args, context, info) => {
             try {
-                let nameTable = 'authors';
+                let nameTable = 'categories';
                 const data = pagination(nameTable, args, context, info);
                 return {
                     error: null,
@@ -19,80 +19,67 @@ const resolvers = {
             }
         },
     },
+
     Mutation: {
-        insertBook: async(parent, args, context, info) => {
+        insertCategory: async(parent, args, context, info) => {
             try {
-                const { name, author, auth_id } = args;
+                const { name, auth_id, book_id } = args;
                 const entity = {
                     name,
-                    author,
                     auth_id,
+                    book_id,
                 };
-                const data = await db('books')
+                const data = await db('categories')
                     .insert(entity)
                     .returning('*');
                 return {
-                    error: null,
                     result: data,
                 };
             } catch (error) {
                 return {
-                    error,
-                    result: null,
+                    result: error,
                 };
             }
         },
 
-        updateBook: async(parent, args, context, info) => {
+        updateCategory: async(parent, args, context, info) => {
             try {
-                const { id, name, author, auth_id } = args;
+                const { id, name, auth_id, book_id } = args;
                 const entity = {
                     name,
-                    author,
                     auth_id,
+                    book_id,
                 };
-                const data = await db('books')
+                const data = await db('categories')
                     .where({ id })
                     .update(entity)
                     .returning('*');
                 return {
-                    error: null,
                     result: data,
                 };
             } catch (error) {
                 return {
-                    error,
-                    result: null,
+                    result: error,
                 };
             }
         },
-        deleteBook: async(parent, args, context, info) => {
+
+        deleteCategory: async(parent, args, context, info) => {
             try {
                 const { id } = args;
-                const data = await db('books')
+                const data = await db('categories')
                     .del()
                     .where({ id })
                     .returning('*');
                 return {
-                    error: null,
                     result: data,
                 };
             } catch (error) {
                 return {
-                    error,
-                    result: null,
+                    result: error,
                 };
             }
         },
-    },
-    Book: {
-        createdAt: (parent) => {
-            return parent.created_at;
-        },
-        updateAt: (parent) => {
-            return parent.update_at;
-        },
-        authors: (parent) => {},
     },
 };
 
