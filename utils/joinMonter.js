@@ -1,5 +1,5 @@
 const { connectionFromArray } = require('graphql-relay');
-const joinMonster = require('join-monster').default;
+const { default: joinMonster } = require('join-monster');
 
 const db = require('../db/knex');
 

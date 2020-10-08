@@ -3,10 +3,11 @@ const db = require('../../db/knex');
 
 const resolvers = {
     Query: {
-        books: (parent, args, context, info) => {
+        books: async(parent, args, context, resolveInfo) => {
             try {
-                let nameTable = 'authors';
-                const data = pagination(nameTable, args, context, info);
+                const nameTable = 'books';
+                const data = pagination(nameTable, args, context, resolveInfo);
+                console.log(resolveInfo);
                 return {
                     error: null,
                     result: data,
