@@ -12,7 +12,7 @@ const {
     connectionFromArray,
 } = require('graphql-relay');
 
-const { Author, AuthorConnection } = require('./Author');
+const { AuthorConnection } = require('./Author');
 const { nodeInterface } = require('./Node');
 
 const Book = new GraphQLObjectType({

@@ -5,14 +5,9 @@ const {
     GraphQLList,
 } = require('graphql');
 const { GraphQLDateTime } = require('graphql-iso-date');
-const {
-    connectionDefinitions,
-    globalIdField,
-    forwardConnectionArgs,
-} = require('graphql-relay');
+const { connectionDefinitions, globalIdField } = require('graphql-relay');
 
 const { nodeInterface } = require('./Node');
-const { BookConnection, Book } = require('./Book');
 
 const Author = new GraphQLObjectType({
     name: 'Author',
