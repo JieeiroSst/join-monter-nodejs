@@ -16,7 +16,14 @@ const schema = makeExecutableSchema({
 
 joinMonsterAdapt(schema, {
     Query: {
-        fields: {},
+        fields: {
+            book: {
+                where: (table, args) => {
+                    console.log(args);
+                    return `${table}.id=${args.id}`;
+                },
+            },
+        },
     },
 
     Mutation: {

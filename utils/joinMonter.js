@@ -11,12 +11,13 @@ const pagination = async(nameTable, args, context, resolveInfo) => {
     const data = await joinMonster(
         resolveInfo,
         context,
-        (sql) => {
-            return db.raw(sql);
+        async(sql) => {
+            console.log(sql);
+            return await db.raw(sql);
         },
         options
     );
-    console.log(data);
+    console.log('...');
     const entity = { total, ...connectionFromArray(data, args) };
     return entity;
 };

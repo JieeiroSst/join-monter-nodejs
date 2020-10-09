@@ -1,41 +1,35 @@
 const joinMonster = require('join-monster').default;
-const { connectionFromArray } = require('graphql-relay');
 
 const { pagination } = require('../../utils/joinMonter');
 const db = require('../../db/knex');
+const pg = require('pg');
 
 const resolvers = {
     Query: {
-        books: async(parent, args, context, resolveInfo) => {
+        async books(parent, args, context, resolveInfo) {
             const nameTable = 'books';
             const data = await pagination(nameTable, args, context, resolveInfo);
-            console.log(data);
             return {
                 error: false,
                 result: data,
             };
+        },
 
-            // const [res] = await db(nameTable).count('*');
-            // const total = res.count;
-            // console.log(joinMonster);
-            // const data = await joinMonster(
-            //     resolveInfo,
-            //     context,
-            //     (sql) => {
-            //         console.log(sql);
-            //         return db.raw(sql);
-            //     }, { dialect: 'pg' }
-            // );
-            // const entity = { total, ...connectionFromArray(data, args) };
-            // return {
-            //     error: false,
-            //     result: entity,
-            // };
+        async book(parent, args, ctx, resolveInfo) {
+            console.log(args);
+            return joinMonster(
+                resolveInfo,
+                ctx,
+                async(sql) => {
+                    console.log(sql);
+                    return await db.raw(sql);
+                }, { dialect: 'pg' }
+            );
         },
     },
 
     Mutation: {
-        insertBook: async(parent, args, context, info) => {
+        async insertBook(parent, args, context, info) {
             try {
                 const { name, author, auth_id } = args;
                 const entity = {
@@ -58,7 +52,7 @@ const resolvers = {
             }
         },
 
-        updateBook: async(parent, args, context, info) => {
+        async updateBook(parent, args, context, info) {
             try {
                 const { id, name, author, auth_id } = args;
                 const entity = {
@@ -81,7 +75,7 @@ const resolvers = {
                 };
             }
         },
-        deleteBook: async(parent, args, context, info) => {
+        async deleteBook(parent, args, context, info) {
             try {
                 const { id } = args;
                 const data = await db('books')

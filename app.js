@@ -4,6 +4,7 @@ const mount = require('koa-mount');
 const bodyParser = require('koa-body-parser');
 
 const schema = require('./graphql');
+const schemaTest = require('./graphql/resolvers/test');
 const loginRouter = require('./api/login');
 
 const app = new Koa();

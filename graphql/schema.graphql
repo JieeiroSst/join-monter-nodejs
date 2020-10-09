@@ -12,7 +12,11 @@ type Query {
 
   books(first: Int, after: String, last: Int, before: String): BooksResult
 
+  book(id: Int): BookResult
+
   authors(first: Int, after: String, last: Int, before: String): AuthorsResult
+
+  test: BookResult
 }
 
 type Mutation {
