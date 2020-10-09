@@ -2,7 +2,9 @@ const { nodeField } = require('../../utils/node');
 
 const resolvers = {
     Query: {
-        node: nodeField,
+        node: {
+            nodeField,
+        },
     },
 };
 

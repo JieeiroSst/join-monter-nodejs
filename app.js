@@ -1,16 +1,16 @@
 const Koa = require('koa');
-const KoaRouter = require('koa-router');
 const graphqlHTTP = require('koa-graphql');
 const mount = require('koa-mount');
-const koaBody = require('koa-bodyparser');
+const bodyParser = require('koa-body-parser');
 
 const schema = require('./graphql');
 const loginRouter = require('./api/login');
 
 const app = new Koa();
-const router = new KoaRouter();
 
-app.use(koaBody());
+app.use(bodyParser());
+
+app.use(loginRouter.routes());
 
 const context = (ctx, next) => {
     const { authorization: token } = ctx.headers;
@@ -26,13 +26,11 @@ app.use(
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
-                //token: context(ctx),
             },
+            context: () => context(ctx),
         }))
     )
 );
-
-app.use(loginRouter.routes());
 
 const port = 3000;
 app.listen(port, () =>
