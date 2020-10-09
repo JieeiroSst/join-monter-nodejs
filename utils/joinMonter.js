@@ -1,5 +1,5 @@
 const { connectionFromArray } = require('graphql-relay');
-const { default: joinMonster } = require('join-monster');
+const joinMonster = require('join-monster').default;
 
 const db = require('../db/knex');
 
@@ -11,6 +11,7 @@ const pagination = async(nameTable, args, context, resolveInfo) => {
             return db.raw(sql);
         }, { dialect: 'pg' }
     );
+    console.log(await db(nameTable));
     const [res] = await db(nameTable).count('*');
     const total = res.count;
     const entity = { total, ...connectionFromArray(data, args) };

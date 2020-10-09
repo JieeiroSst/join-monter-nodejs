@@ -1,9 +1,11 @@
 const { makeExecutableSchema } = require('graphql-tools');
 const joinMonsterAdapt = require('join-monster-graphql-tools-adapter');
+const { globalIdField } = require('graphql-relay');
 
 const typeDefs = require('./typeDefs');
 let resolvers = require('./resolvers');
 const scalar = require('../scalar/isoDate');
+const { nodeInterface } = require('../utils/node');
 
 resolvers = {...scalar, ...resolvers };
 
@@ -18,9 +20,15 @@ joinMonsterAdapt(schema, {
     },
 
     Author: {
+        name: 'Author',
         sqlTable: 'authors',
         uniqueKey: 'id',
+        interfaces: [nodeInterface],
         fields: {
+            id: {
+                ...globalIdField(),
+                sqlDeps: ['id'],
+            },
             createdAt: {
                 sqlColumn: 'created_at',
             },
@@ -31,9 +39,15 @@ joinMonsterAdapt(schema, {
     },
 
     Book: {
+        name: 'Book',
         sqlTable: 'books',
         uniqueKey: 'id',
+        interfaces: [nodeInterface],
         fields: {
+            id: {
+                ...globalIdField(),
+                sqlDeps: ['id'],
+            },
             createdAt: {
                 sqlColumn: 'created_at',
             },
@@ -47,9 +61,15 @@ joinMonsterAdapt(schema, {
         },
     },
     Category: {
+        name: 'Category',
         sqlTable: 'categories',
         uniqueKey: 'id',
+        interfaces: [nodeInterface],
         fields: {
+            id: {
+                ...globalIdField(),
+                sqlDeps: ['id'],
+            },
             authors: {
                 sqlJoin: (categoryTable, authorTable) =>
                     `${categoryTable}.auth_id=${authorTable}.id`,
