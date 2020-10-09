@@ -8,36 +8,29 @@ const resolvers = {
     Query: {
         books: async(parent, args, context, resolveInfo) => {
             const nameTable = 'books';
-            // try {
-            //     const data = await pagination(nameTable, args, context, resolveInfo);
-            //     console.log(data);
-            //     return {
-            //         error: false,
-            //         result: data,
-            //     };
-            // } catch (error) {
-            //     return {
-            //         error: true,
-            //         result: null,
-            //     };
-            // }
-
-            const data = await joinMonster(
-                resolveInfo,
-                context,
-                (sql) => {
-                    console.log(sql);
-                    return db.raw(sql);
-                }, { dialect: 'pg' }
-            );
-            const [res] = await db(nameTable).count('*');
-            const total = res.count;
-            const entity = { total, ...connectionFromArray(data, args) };
-            console.log(entity);
+            const data = await pagination(nameTable, args, context, resolveInfo);
+            console.log(data);
             return {
                 error: false,
-                result: entity,
+                result: data,
             };
+
+            // const [res] = await db(nameTable).count('*');
+            // const total = res.count;
+            // console.log(joinMonster);
+            // const data = await joinMonster(
+            //     resolveInfo,
+            //     context,
+            //     (sql) => {
+            //         console.log(sql);
+            //         return db.raw(sql);
+            //     }, { dialect: 'pg' }
+            // );
+            // const entity = { total, ...connectionFromArray(data, args) };
+            // return {
+            //     error: false,
+            //     result: entity,
+            // };
         },
     },
 

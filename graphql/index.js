@@ -63,11 +63,13 @@ joinMonsterAdapt(schema, {
                 sqlColumn: 'update_at',
             },
             authors: {
+                sqlTable: 'authors',
                 sqlJoin: (bookTable, authorTable) =>
                     `${bookTable}.auth_id=${authorTable}.id`,
             },
         },
     },
+
     Category: {
         description: 'Category description',
         name: 'Category',
