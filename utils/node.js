@@ -2,6 +2,7 @@ const { nodeDefinitions, fromGlobalId } = require('graphql-relay');
 const joinMonster = require('join-monster').default;
 
 const db = require('../db/knex');
+const options = { dialect: 'pg' };
 
 const { nodeInterface, nodeField } = nodeDefinitions(
     async(globalId, context, resolverInfo) => {
@@ -13,7 +14,8 @@ const { nodeInterface, nodeField } = nodeDefinitions(
             parseInt(id),
             (sql) => {
                 return db.raw(sql);
-            }, { dialect: 'pg' }
+            },
+            options
         );
     },
     (obj) => obj.__type__

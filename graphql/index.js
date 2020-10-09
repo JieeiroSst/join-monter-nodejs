@@ -19,10 +19,16 @@ joinMonsterAdapt(schema, {
         fields: {},
     },
 
+    Mutation: {
+        fields: {},
+    },
+
     Author: {
+        description: 'Author description',
         name: 'Author',
         sqlTable: 'authors',
         uniqueKey: 'id',
+        sqlPaginate: true,
         interfaces: [nodeInterface],
         fields: {
             id: {
@@ -39,9 +45,11 @@ joinMonsterAdapt(schema, {
     },
 
     Book: {
+        description: 'Book description',
         name: 'Book',
         sqlTable: 'books',
         uniqueKey: 'id',
+        sqlPaginate: true,
         interfaces: [nodeInterface],
         fields: {
             id: {
@@ -61,9 +69,11 @@ joinMonsterAdapt(schema, {
         },
     },
     Category: {
+        description: 'Category description',
         name: 'Category',
         sqlTable: 'categories',
         uniqueKey: 'id',
+        sqlPaginate: true,
         interfaces: [nodeInterface],
         fields: {
             id: {

@@ -1,3 +1,6 @@
+const joinMonster = require('join-monster').default;
+const { connectionFromArray } = require('graphql-relay');
+
 const { pagination } = require('../../utils/joinMonter');
 const db = require('../../db/knex');
 
@@ -5,18 +8,36 @@ const resolvers = {
     Query: {
         books: async(parent, args, context, resolveInfo) => {
             const nameTable = 'books';
-            try {
-                const data = await pagination(nameTable, args, context, resolveInfo);
-                return {
-                    error: null,
-                    result: data,
-                };
-            } catch (error) {
-                return {
-                    error,
-                    result: null,
-                };
-            }
+            // try {
+            //     const data = await pagination(nameTable, args, context, resolveInfo);
+            //     console.log(data);
+            //     return {
+            //         error: false,
+            //         result: data,
+            //     };
+            // } catch (error) {
+            //     return {
+            //         error: true,
+            //         result: null,
+            //     };
+            // }
+
+            const data = await joinMonster(
+                resolveInfo,
+                context,
+                (sql) => {
+                    console.log(sql);
+                    return db.raw(sql);
+                }, { dialect: 'pg' }
+            );
+            const [res] = await db(nameTable).count('*');
+            const total = res.count;
+            const entity = { total, ...connectionFromArray(data, args) };
+            console.log(entity);
+            return {
+                error: false,
+                result: entity,
+            };
         },
     },
 
