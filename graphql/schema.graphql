@@ -46,7 +46,7 @@ type PageInfo {
 type BookConnection {
   edges: [BookEdge!]!
   pageInfo: PageInfo
-  totalCount: Int
+  total: Int
 }
 
 type BooksResult {
@@ -64,7 +64,7 @@ type BookEdge {
 type AuthorConnection {
   edges: [AuthorEdge!]!
   pageInfo: PageInfo
-  totalCount: Int
+  total: Int
 }
 
 type AuthorsResult {
@@ -81,7 +81,7 @@ type AuthorEdge {
 type CategoryConnection {
   edges: [CategoryEdge!]!
   pageInfo: PageInfo
-  totalCount: Int
+  total: Int
 }
 
 type CategoryEdge {

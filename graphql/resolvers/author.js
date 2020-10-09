@@ -69,14 +69,6 @@ const resolvers = {
             }
         },
     },
-    Author: {
-        createdAt: (parent) => {
-            return parent.created_at;
-        },
-        updateAt: (parent) => {
-            return parent.update_at;
-        },
-    },
 };
 
 module.exports = { resolvers };

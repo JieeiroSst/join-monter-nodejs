@@ -86,16 +86,6 @@ const resolvers = {
             }
         },
     },
-
-    Book: {
-        createdAt: (parent) => {
-            return parent.created_at;
-        },
-        updateAt: (parent) => {
-            return parent.update_at;
-        },
-        authors: (parent) => {},
-    },
 };
 
 module.exports = { resolvers };
