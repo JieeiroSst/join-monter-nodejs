@@ -16,7 +16,6 @@ const resolvers = {
                 resolveInfo,
                 ctx,
                 async(sql) => {
-                    console.log(sql);
                     return await db.raw(sql);
                 }, { dialect: 'pg' }
             );

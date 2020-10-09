@@ -117,12 +117,12 @@ type CategoryResult {
 
 #interface
 interface Node {
-  id: ID
+  id: ID!
 }
 
 #category
 type Category implements Node {
-  id: ID
+  id: ID!
   name: String
   authors: [Author]
   books: [Book]
@@ -130,7 +130,7 @@ type Category implements Node {
 
 #category
 type Book implements Node {
-  id: ID
+  id: ID!
   name: String
   author: String
   createdAt: DateTime
@@ -140,7 +140,7 @@ type Book implements Node {
 
 #author
 type Author implements Node {
-  id: ID
+  id: ID!
   name: String
   createdAt: DateTime
   updateAt: DateTime

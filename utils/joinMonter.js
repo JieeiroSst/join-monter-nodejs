@@ -1,8 +1,6 @@
 const { connectionFromArray } = require('graphql-relay');
 const joinMonster = require('join-monster').default;
 
-console.log(connectionFromArray);
-
 const db = require('../db/knex');
 
 const options = { dialect: 'pg' };
@@ -12,6 +10,7 @@ const pagination = async(args, context, resolveInfo) => {
         resolveInfo,
         context,
         async(sql) => {
+            console.log(sql);
             return await db.raw(sql);
         },
         options

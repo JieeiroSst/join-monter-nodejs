@@ -18,6 +18,7 @@ const { nodeInterface, nodeField } = nodeDefinitions(
             options
         );
     },
+
     (obj) => obj.__type__
 );
 
