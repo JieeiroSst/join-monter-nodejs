@@ -2,17 +2,12 @@ const joinMonster = require('join-monster').default;
 
 const { pagination } = require('../../utils/joinMonter');
 const db = require('../../db/knex');
-const pg = require('pg');
 
 const resolvers = {
     Query: {
         async books(parent, args, context, resolveInfo) {
-            const nameTable = 'books';
-            const data = await pagination(nameTable, args, context, resolveInfo);
-            return {
-                error: false,
-                result: data,
-            };
+            const data = await pagination(args, context, resolveInfo);
+            return data;
         },
 
         async book(parent, args, ctx, resolveInfo) {

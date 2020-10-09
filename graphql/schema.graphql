@@ -8,13 +8,18 @@ type Query {
     after: String
     last: Int
     before: String
-  ): CategoriesResult
+  ): CategoryConnection
 
-  books(first: Int, after: String, last: Int, before: String): BooksResult
+  books(first: Int, after: String, last: Int, before: String): BookConnection
 
-  book(id: Int): BookResult
+  book(id: Int): Book
 
-  authors(first: Int, after: String, last: Int, before: String): AuthorsResult
+  authors(
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): AuthorConnection
 
   test: BookResult
 }

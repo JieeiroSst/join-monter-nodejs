@@ -17,6 +17,30 @@ const schema = makeExecutableSchema({
 joinMonsterAdapt(schema, {
     Query: {
         fields: {
+            books: {
+                sqlTable: 'books',
+                sqlPaginate: true,
+                orderBy: {
+                    id: 'desc',
+                },
+            },
+
+            authors: {
+                sqlTable: 'authors',
+                sqlPaginate: true,
+                orderBy: {
+                    id: 'desc',
+                },
+            },
+
+            categories: {
+                sqlTable: 'categories',
+                sqlPaginate: true,
+                orderBy: {
+                    id: 'desc',
+                },
+            },
+
             book: {
                 where: (table, args) => {
                     console.log(args);
