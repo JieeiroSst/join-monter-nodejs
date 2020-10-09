@@ -47,15 +47,13 @@ const Book = new GraphQLObjectType({
 
         authors: {
             type: AuthorConnection,
-            junction: {
-                sqlTable: 'categories',
-                sqlJoins: [
-                    (bookTable, categoryTable) =>
-                    `${bookTable}.auth_id=${categoryTable}.auth_id`,
-                    (categoryTable, authorTable) =>
-                    `${categoryTable}.auth_id=${authorTable}.id`,
-                ],
+            sqlPaginate: true,
+            args: forwardConnectionArgs,
+            orderBy: {
+                id: 'desc',
             },
+            sqlJoin: (bookTable, authorTable) =>
+                `${bookTable}.auth_id = ${authorTable}.id`,
         },
     },
 });
