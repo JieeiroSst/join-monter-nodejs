@@ -10,7 +10,6 @@ const pagination = async(args, context, resolveInfo) => {
         resolveInfo,
         context,
         async(sql) => {
-            console.log(sql);
             return await db.raw(sql);
         },
         options

@@ -12,8 +12,9 @@ app.use(bodyParser());
 
 app.use(loginRouter.routes());
 
-const context = (ctx, next) => {
+const context = async(ctx, next) => {
     const { authorization: token } = ctx.headers;
+    console.log(token);
     const userVerified = jwt.verify(token, secret);
     return { userVerified };
 };
@@ -26,8 +27,8 @@ app.use(
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
+                //token: context(ctx),
             },
-            context: () => context(ctx),
         }))
     )
 );
